@@ -10,6 +10,7 @@ del /f /s /q *.obj
 del /f /s /q *.obj
 del /f /s /q *.ncb
 del /f /s /q *.aps
+del /f /s /q *.cd
 for /f "delims=" %%a in ('dir /ad/s/b Debug') do rd /s /q "%%~a"
 for /f "delims=" %%a in ('dir /ad/s/b Debug') do rd /s /q "%%~a"
 for /f "delims=" %%a in ('dir /ad/s/b Debug') do rd /s /q "%%~a"
