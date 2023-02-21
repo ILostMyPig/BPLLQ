@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Select a Product Configuration -->
+		<InstallShieldProductConfiguration>Express</InstallShieldProductConfiguration>
+		<!-- Select a Visual Studio Configuration / InstallShield Release -->
+		<Configuration>Debug</Configuration>
+		<InstallShieldRelease>$(Configuration)</InstallShieldRelease>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- The InstallShieldProject item selects the project to build -->
+		<InstallShieldProject Include="$(MSBuildProjectDirectory)\$(MSBuildProjectName).isl"/>
+		<!-- The InstallShieldReleaseFlags sets Release Flags -->
+		<!--<InstallShieldReleaseFlags Include=""/>-->
+		<!-- The InstallShieldMergeModulePath specifies what directories are
+		searched for Merge Modules -->
+		<!--<InstallShieldMergeModulePath Include=""/>-->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The ProjectReference items refer to any Visual Studio solutions you want to automatically probe for Project Output Groups.  -->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The TaggedOutputs items allow you to explicitly add extra files to output groups. Each item must include both Name and OutputGroup, as well as TargetPath metadata values. -->
+		<!--<TaggedOutputs Include="C:\My Test Exe.exe">
+			<Name>My Test Project</Name>
+			<OutputGroup>Primary output</OutputGroup>
+			<TargetPath>My Test Exe.exe</TargetPath>
+		</TaggedOutputs> -->
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2015Limited\InstallShield.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\Disable_the_Accessibility_Shortcut_Keys\Disable_the_Accessibility_Shortcut_Keys.vcxproj">
+			<Name>Disable_the_Accessibility_Shortcut_Keys</Name>
+			<Project>{86468D03-2BAC-4894-963C-9F4A2D9EAE4F}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\KeyBoardHook\KeyBoardHook.vcxproj">
+			<Name>KeyBoardHook</Name>
+			<Project>{88ED482E-78A1-4418-A4FB-F41EF2D85E7F}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\cs_fxb_win_hook\cs_fxb_win_hook.csproj">
+			<Name>cs_fxb_win_hook</Name>
+			<Project>{BF9953DB-FA9B-4492-B5D6-F0579A43A644}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\dis_cad_dll\dis_cad_dll.vcxproj">
+			<Name>dis_cad_dll</Name>
+			<Project>{5538FBAA-6AF5-4703-BCAB-088D2A1C4AD7}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\dis_start\dis_start.vcxproj">
+			<Name>dis_start</Name>
+			<Project>{E494D549-279F-40F7-9FE2-8B4ED0088B6B}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\guard\guard.csproj">
+			<Name>guard</Name>
+			<Project>{D1D923C8-DD4D-43DA-AD39-0E8E316D76F5}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\set_ini\set_ini.csproj">
+			<Name>set_ini</Name>
+			<Project>{2C482781-9D2F-47A9-A7AB-649440645D5D}</Project>
+		</ProjectReference>
+	</ItemGroup>
+</Project>
