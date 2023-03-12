@@ -14,8 +14,6 @@
   - 软件类型：国产软件
   - 应用平台：windows 7 sp1 32位
   - 软件语言：简体中文
-  - 开发工具：Microsoft Visual Studio 2010 professional sp1
-  - 安装打包工具：InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015
 
 # 下载文件
 
