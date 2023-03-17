@@ -22,11 +22,11 @@
 
   - 安装程序下载地址：[霸屏浏览器(V6.2.0)](https://pan.baidu.com/s/1xd7G6BWvde8HF81SPjFrsg)提取码：9x2o
   ## 开发环境
-  - 安装打包工具：[InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015](https://pan.baidu.com/s/1mboAgy0ZXLYZTAMeVvyepQ)提取码：c2eb（注：从V6.2.0开始停用此工具。）
+  - 安装打包工具（从V6.2.0开始停用此软件）：[InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015](https://pan.baidu.com/s/1mboAgy0ZXLYZTAMeVvyepQ)提取码：c2eb
   - 开发工具：[Microsoft Visual Studio 2010 professional sp1](https://pan.baidu.com/s/1ihtcSj4DzyZBs43QYGX8oQ)提取码：p2px
 
   ## 源代码
-  - 所有版本的源代码合集：[霸屏浏览器（code）](https://pan.baidu.com/s/1UfaNEYuDx3Ins5FdzbUIPg)提取码：mwpi
+  - 所有版本的源代码：[霸屏浏览器（code）](https://pan.baidu.com/s/1UfaNEYuDx3Ins5FdzbUIPg)提取码：mwpi
 
   ## 程序流程图
   - 下载地址：[霸屏浏览器程序流程图](https://pan.baidu.com/s/1tpqniq9CoicXlXnL9B90PA)提取码：nyxp

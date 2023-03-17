@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <fstream>
 
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG
 #define LOG(x,z) {std::ofstream outfile(x,std::ios::app);outfile<<z<<std::endl;outfile.close();}
 #else
@@ -29,6 +29,7 @@ LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 	// MSDN：flag的第8bit为按键按下抬起标志，按下为1，抬起为0。
 	// 经测试，flag按下为0，抬起为128。按住不抬，则一直传入按下消息。
 	LOG("KeyboardHook.log", "pKeyInfo->vkCode : " << pKeyInfo->vkCode);
+	LOG("KeyboardHook.log", "pKeyInfo->scanCode : " << pKeyInfo->scanCode);
 	LOG("KeyboardHook.log", "pKeyInfo->flags : " << pKeyInfo->flags);
 	LOG("KeyboardHook.log", "pKeyInfo->time : " << pKeyInfo->time);
 
@@ -38,23 +39,24 @@ LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		if ((pKeyInfo->flags & 0x80) == 0)
-		{ // 所有按键，若为抬起消息，则不拦截。
+		if ((pKeyInfo->flags & LLKHF_UP) == 1)
+		{ // 所有按键，是否为抬起消息，是则不拦截。
 			return CallNextHookEx(g_hHook, code, wParam, lParam);
 		}
 		else
-		{
-			/*
+		{ // 所有按键，是否为抬起消息，是则不拦截。
+			/* 在WinUser.h中如下说明：
 			 * VK_L* & VK_R* - left and right Alt, Ctrl and Shift virtual keys.
 			 * Used only as parameters to GetAsyncKeyState() and GetKeyState().
 			 * No other API or message will distinguish left and right keys in this way.
-			 * VK_LCONTROL VK_RCONTROL VK_LSHIFT VK_RSHIFT
+			 * 但是对Alt键的测试结果并非如此，在此低级键盘钩子的消息中，按左Alt，传入VK_LMENU。
 			 */
 			if ((a == VK_TAB) || (a == VK_RETURN) || (a == VK_CAPITAL) // 功能键：tab、enter、caps。
 				|| (a >= VK_SPACE && a <= VK_HOME)  // 功能键：space，home，end，pgup，pgdn。
 				|| (a == VK_INSERT) || (a == VK_DELETE) // 功能键。
 				|| (a == VK_F5) || (a == VK_NUMLOCK) || (a == VK_BACK) // 功能键。
-				|| (a == VK_CONTROL) || (a == VK_SHIFT) // CONTROL、SHIFT。
+				|| (a == VK_CONTROL) || (a == VK_LCONTROL) || (a == VK_RCONTROL) // CONTROL。
+				|| (a == VK_SHIFT) || (a == VK_LSHIFT) || (a == VK_RSHIFT) // SHIFT。
 				|| (a >= VK_LEFT && a <= VK_DOWN) // 方向键上下左右。
 				|| (a >= 0x30 && a <= 0x39) // 数字键0-9。
 				|| (a >= 0x41 && a <= 0x5A) // 字母A-Z。
@@ -73,7 +75,8 @@ LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 					if (keyState < 0)
 					{ // 是否ctrl键被按住，是则筛选按键。
 						if (a == VK_SPACE // space。
-							|| (a == VK_CONTROL) || (a == VK_SHIFT) // CONTROL、SHIFT。
+							|| (a == VK_CONTROL) || (a == VK_LCONTROL) || (a == VK_RCONTROL) // CONTROL。
+							|| (a == VK_SHIFT) || (a == VK_LSHIFT) || (a == VK_RSHIFT) // SHIFT。
 							|| a == 0x43 || a == 0x58 || a == 0x56 // c、x、v。
 							)
 						{ // 是否按键为space、shift、ctrl、x、c、v，是则不拦截。
