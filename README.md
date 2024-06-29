@@ -134,26 +134,14 @@ V1.0.0
 
 - 第一版。
 
-## 下载文件
+## 下载源代码和EXE文件
 
-  ### 最新版
-
-**霸屏浏览器**
-
-  - 下载地址：[霸屏浏览器](https://pan.baidu.com/s/1xd7G6BWvde8HF81SPjFrsg)提取码：9x2o
+[霸屏浏览器（code）](https://github.com/ILostMyPig/BPLLQ)
 
 **霸屏浏览器启动程序 ：cs_fxb_win_hook.exe。**
 **设置程序：set_ini.exe。**
 
-  ### 开发环境
+## 下载开发环境
 
   - 安装打包工具（自V6.2.0开始停止使用）：[InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015](https://pan.baidu.com/s/1mboAgy0ZXLYZTAMeVvyepQ)提取码：c2eb
   - 开发工具：[Microsoft Visual Studio 2010 professional sp1](https://pan.baidu.com/s/1ihtcSj4DzyZBs43QYGX8oQ)提取码：p2px
-
-  ### 源代码
-
-  - 所有版本的源代码：[霸屏浏览器（code）](https://github.com/ILostMyPig/BPLLQ)
-
-  ### 程序流程图
-
-  - 下载地址：[霸屏浏览器程序流程图](https://pan.baidu.com/s/1tpqniq9CoicXlXnL9B90PA)提取码：nyxp
