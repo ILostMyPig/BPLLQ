@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <fstream>
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #define LOG(x,z) {std::ofstream outfile(x,std::ios::app);outfile<<z<<std::endl;outfile.close();}
 #else
@@ -51,9 +51,9 @@ LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 			 * No other API or message will distinguish left and right keys in this way.
 			 * 但是对Alt键的测试结果并非如此，在此低级键盘钩子的消息中，按左Alt，传入VK_LMENU。
 			 */
-			if ((a == VK_TAB) || (a == VK_RETURN) || (a == VK_CAPITAL) // 功能键：tab、enter、caps。
-				|| (a >= VK_SPACE && a <= VK_HOME)  // 功能键：space，home，end，pgup，pgdn。
-				|| (a == VK_INSERT) || (a == VK_DELETE) // 功能键。
+			if ((a == VK_TAB) || (a == VK_RETURN) || (a == VK_CAPITAL) // 功能键：tab 0x09、enter 0x0D、caps 0x14。
+				|| (a >= VK_SPACE && a <= VK_HOME)  // 功能键：space 0x20，home 0x24，end，pgup，pgdn。
+				|| (a == VK_INSERT) || (a == VK_DELETE) // 功能键：insert，delete。
 				|| (a == VK_F5) || (a == VK_NUMLOCK) || (a == VK_BACK) // 功能键。
 				|| (a == VK_CONTROL) || (a == VK_LCONTROL) || (a == VK_RCONTROL) // CONTROL。
 				|| (a == VK_SHIFT) || (a == VK_LSHIFT) || (a == VK_RSHIFT) // SHIFT。

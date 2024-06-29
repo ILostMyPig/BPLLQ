@@ -9,19 +9,13 @@ namespace cs_fxb_win_hook
     /// </summary>
     class MyGlobal
     {
-        /// <summary>exe文件所在文件夹（斜杠结尾）。
-        /// </summary>
-        public static string thisPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        public static string thisPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase; // exe文件所在文件夹（斜杠结尾）。
 
         public static Form1 fMain;
 
-        /// <summary>用户退出密码。
-        /// </summary>
-        public static ContinuousPW cPw = new ContinuousPW();
+        public static ContinuousPW cPw = new ContinuousPW(); // 用户退出密码。
 
-        /// <summary>后门退出密码。
-        /// </summary>
-        public static ContinuousPW cPw2 = new ContinuousPW();
+        public static ContinuousPW cPw2 = new ContinuousPW(); // 后门退出密码。
 
         public static ShiftConversion sc = new ShiftConversion();
 
@@ -33,18 +27,16 @@ namespace cs_fxb_win_hook
 
         public MyGlobal() // 初始化全局变量
         {
-            int re;
-
             // 初始化 fIni
-            re = fIni.LoadIni(thisPath + "set.ini"); // 载入 ini 文件。
+            fIni.LoadIniFile (thisPath + "set.ini"); // 载入 ini 文件。
 
             // 初始化 cPw
             string exitPw = string.Empty; // 从 ini 文件载入“关闭密码”。
-            re = fIni.GetEntry("关闭密码", ref exitPw);
-            re = cPw.SetPw(exitPw);
+            exitPw = fIni.GetValueOfKey("关闭密码");
+            cPw.SetPw(exitPw);
 
             // 初始化 cPw2
-            re = cPw2.SetPw("11223344556677889900");//后门代码：关闭程序。
+            cPw2.SetPw("11223344556677889900"); // 后门代码：关闭程序。
         }
 
 

@@ -5,237 +5,213 @@ using System.Text;
 
 namespace FileIni
 {
+    // 对ini文件要求：
+    // 每项一行，并以=号分割。
     public class FileIni
     {
-        //构造函数
+        // ************************ 构造函数 ********************
 
-        /// <summary>初始化字段。
-        ///</summary>
+
         public FileIni()
         {
+            // 初始化字段。
             path = "";
             all = new System.Collections.ArrayList();
         }
 
-        //字段
 
-        /// <summary>项目。
-        /// </summary>
-        public System.Collections.ArrayList all;
+        // ************************ 字段 ************************
 
-        /// <summary>ini 文件的完整路径。
-        /// </summary>
-        public string path;
 
-        //方法
+        public System.Collections.ArrayList all;    // 保存所有项。
+        static public string splitText = "=";       // key和value之间的分隔符。
+        public string path;                         // 文件的完整名称。
 
-        /// <summary>载入现有ini文件。
-        /// <returns>
-        /// <para>return -1：文件不存在。</para>
-        /// <para>return >= 0：返回项目数量。</para>
-        /// </returns></summary>
-        /// <param name="path">ini文件的完整路径。</param>
-        public int LoadIni(
-            string path)
+
+        // ************************ 方法 ************************
+
+
+        /// <summary>载入ini文件。</summary>
+        /// <param name="f">ini文件的完整文件名。</param>
+        public void LoadIniFile(string f)
         {
-            this.path = path;
-            if (System.IO.File.Exists(path))
+            string[] allLine = System.IO.File.ReadAllLines(f, Encoding.Unicode);
+            this.path = f; // 文件读取成功后，再改相关数据。
+            all.Clear();
+            System.Collections.ArrayList tAL;
+            for (int i = 0; i < allLine.GetLength(0); i++)
             {
-                string[] allLine = System.IO.File.ReadAllLines(path, Encoding.Unicode );
-                System.Collections.ArrayList xAL;
-                string xstr = "";
-                int xint;
-                for (int i = 0; i < allLine.GetLength(0); i++)
+                if (allLine[i] == string.Empty)
+                { // 跳过空行。
+                    continue;
+                }
+                else
                 {
-                    xint = CutApartEntry(ref allLine[i], ref xstr);
-                    if (0 == xint)
+                    string[] t = null;
+                    try
                     {
-                        xAL = new System.Collections.ArrayList();
-                        xAL.Add(allLine[i]);
-                        xAL.Add(xstr);
-                        all.Add(xAL);
+                        t = SplitItem(allLine[i]);
                     }
+                    catch (System.ArgumentException ex)
+                    {
+                        string exmsg = "“" + f + "”文件中的第" + (i + 1).ToString() + "行有误。";
+                        throw new System.ArgumentException(exmsg, ex);
+                    }
+                    tAL = new System.Collections.ArrayList();
+                    tAL.Add(t[0]);
+                    tAL.Add(t[1]);
+                    all.Add(tAL);
                 }
-                return all.Count;
-            }
-            else
-            {
-                throw new CE_FileIni.NotFoundFileIni("path指定的文件不存在。");
-            }
 
+            }
+        }
+        
+        /// <summary>保存。
+        /// <returns>
+        /// </returns></summary>
+        public void Save()
+        {
+            string a = "";
+            string b = "";
+            foreach (System.Collections.ArrayList i in all)
+            {
+                a = a + b + i[0].ToString() + splitText + i[1].ToString();
+                b = System.Environment.NewLine;
+            }
+            System.IO.File.WriteAllText(this.path, a, Encoding.Unicode);
         }
 
-        /// <summary>根据项目名称，查找项目内容。<br/>
-        /// <returns>
-        /// <para>return -1：该项目不存在。</para>
-        /// <para>return >= 0：该项目的引索。</para>
-        /// </returns></summary>
-        /// <param name="entry">_in_，项目名称。</param>
-        /// <param name="content">_out_，项目内容。</param>
-        public int GetEntry(
-            string entry,
-            ref string content)
+        /// <summary>将所有项导入ListBox。
+        /// </summary>
+        /// <param name="lb">System.Windows.Forms.ListBox。</param>
+        public void ToListbox(ref System.Windows.Forms.ListBox lb)
         {
-            content = "";
-            System.Collections.ArrayList temp;
+            foreach (System.Collections.ArrayList i in all)
+            {
+                lb.Items.Add(i[0].ToString() + splitText + i[1].ToString());
+            }
+        }
+
+        /// <summary>增加项，若其键已存在，则更新值。
+        /// </summary>
+        /// <param name="key">键。</param>
+        /// <param name="value">值。</param>
+        public void UpdateOrAddItem(string key, string value)
+        {
+            System.Collections.ArrayList t = null;
+            int index = 0;
+            try
+            {
+                index = GetIndexOfKey(key);
+                t = (System.Collections.ArrayList)all[index];
+                t[1] = value;
+            }
+            catch (KeyNotFoundException)
+            {
+                t = new System.Collections.ArrayList();
+                t.Add(key);
+                t.Add(value);
+                all.Add(t);
+            }
+        }
+
+        /// <summary>给一个键/值/项，删除对应内容相同的项。
+        /// </summary>
+        /// <param name="str">对应内容。</param>
+        /// <param name="which">键/值/项，"key"/"value"/"item"。</param>
+        public void RemoveItem(string str, string which)
+        {
             for (int i = 0; i < all.Count; i++)
             {
-                temp = (System.Collections.ArrayList)all[i];
-                if ((string)temp[0] == entry)
+                System.Collections.ArrayList a = (System.Collections.ArrayList)all[i];
+                string b = string.Empty;
+                switch (which)
                 {
-                    content = (string)temp[1];
-                    return i;
+                    case "key":
+                        b = a[0].ToString();
+                        break;
+                    case "value":
+                        b = a[1].ToString();
+                        break;
+                    case "item":
+                        b = a[0].ToString() + "=" + a[1].ToString();
+                        break;
+                    default:
+                        break;
+                }
+                if (b == str)
+                {
+                    all.RemoveAt(i);
+                    return;
                 }
             }
-            return -1;
-        }
-
-        /// <summary>增加项目，若该项目已经存在，则更新项目内容。
-        /// <returns>
-        /// <para>return 0：增加项目。</para>
-        /// <para>return 1：更新项目。</para>
-        /// </returns></summary>
-        /// <param name="entry">_in_，项目名称。</param>
-        /// <param name="content">_in_，项目内容。</param>
-        public int SetOrAddEntry(
-            string entry,
-            string content)
-        {
-            System.Collections.ArrayList temp;
-            string x = null;
-            int a = GetEntry(entry, ref x);
-            if (a >= 0)
-            {
-                temp = (System.Collections.ArrayList)all[a];
-                temp[1] = content;
-            }
-            else
-            {
-                temp = new System.Collections.ArrayList();
-                temp.Add(entry);
-                temp.Add(content);
-                all.Add(temp);
-            }
-            return 0;
-        }
-
-        /// <summary>储存项目到载入的文件中。
-        /// <returns>
-        /// <para>return 0:成功。</para>
-        /// <para>return -1:还没有载入ini文件。</para>
-        /// </returns></summary>
-        public int SaveIni()
-        {
-            if ("" == this.path)
-            {
-                return -1;
-            }
-            string a = "";
-            System.Collections.ArrayList temp;
-            for (int i = 0; i < all.Count; i++)
-            {
-                temp = (System.Collections.ArrayList)all[i];
-                a = a + (string)temp[0] + (string)temp[1] + System.Environment.NewLine;
-            }
-            System.IO.File.WriteAllText(this.path, a);
-            return 0;
-        }
-
-        /// <summary>储存项目到指定的文件中。
-        /// <returns>
-        /// <para>return 0：成功。</para>
-        /// </returns></summary>
-        /// <param name="path">_in_，指定的文件。</param>
-        public int SaveIni(
-            string path)
-        {
-            string a = "";
-            System.Collections.ArrayList temp;
-            for (int i = 0; i < all.Count; i++)
-            {
-                temp = (System.Collections.ArrayList)all[i];
-                a = a + (string)temp[0] + (string)temp[1];
-            }
-            System.IO.File.WriteAllText(path, a);
-            return 0;
+            throw new System.Collections.Generic.KeyNotFoundException("不存在对应项。");
         }
 
         /// <summary>将字符串分割成项目名称和项目内容。
         /// <returns>
-        /// <para>return -1：没有找到 = 号，所以无法分割。</para>
-        /// <para>return -2：entry 为 null，所以无法分割。</para>
-        /// <para>return -3：entry 为 string.Empty，所以无法分割。</para>
-        /// <para>return 0：成功。</para>
+        /// <para>SplitItem[0]：名称。</para>
+        /// <para>SplitItem[1]：内容。</para>
         /// </returns></summary>
-        /// <param name="entry">_in_out_，传入字符串，传出项目名称。</param>
-        /// <param name="content">_out_，传出项目内容。</param>        
-        private int CutApartEntry(
-            ref string entry,
-            ref string content)
+        /// <param name="item">_in_，项。</param>  
+        static public string[] SplitItem(string item)
         {
-            if (null == entry)
+
+            if (null == item)
             {
-                return -2;
+                throw new System.ArgumentNullException("item 是 null。");
             }
-            else if (string.Empty == entry)
+            else if (string.Empty == item)
             {
-                return -3;
+                throw new System.ArgumentException("item 是空字符串。");
             }
             else
             {
                 int xint;
-                xint = entry.IndexOf("=");
+                xint = item.IndexOf(splitText);
                 if (-1 == xint)
                 {
-                    return -1;
+                    throw new System.ArgumentException("item 中没有 = 号。");
                 }
                 else
                 {
-                    content = entry.Substring(xint + 1);
-                    entry = entry.Substring(0, xint);
-                    return 0;
+                    string[] kV = new string[2];
+                    kV[0] = item.Substring(0, xint);
+                    kV[1] = item.Substring(xint + 1);
+                    return kV;
                 }
             }
         }
 
-        /// <summary>更新ini文件，新内容覆盖原内容。
-        /// <returns>
-        /// <para>return 0：成功。</para>
-        /// </returns></summary>
-        /// <param name="lb">_in_，传入存放新内容的System.Windows.Forms.ListBox。</param>
-        public int CoverIni(
-            ref System.Windows.Forms.ListBox lb)
-        {
-            string a = "";
-            string b = "";
-            foreach (string str in lb.Items)
-            {
-                a = a + b + str;
-                b = System.Environment.NewLine;
-            }
-            System.IO.File.WriteAllText(this.path, a,Encoding.Unicode );
-            return 0;
-        }
-
-        /// <summary>已经载入的ini文件中的内容存入ListBox。
+        /// <summary>键所在的索引。
         /// </summary>
-        /// <param name="lb">_in_，传入存放内容的System.Windows.Forms.ListBox。</param>
-        public void ToListbox(
-            ref System.Windows.Forms.ListBox lb)
+        /// <param name="key">键。</param>
+        /// <returns></returns>
+        public int GetIndexOfKey(string key)
         {
             for (int i = 0; i < all.Count; i++)
             {
-                lb.Items.Add((string)((System.Collections.ArrayList)all[i])[0] + "=" + (string)((System.Collections.ArrayList)all[i])[1]);
+                System.Collections.ArrayList t = (System.Collections.ArrayList)all[i];
+                if (t[0].ToString() == key)
+                {
+                    return i;
+                }
             }
+            throw new KeyNotFoundException(key);
         }
-    }
-}
-namespace CE_FileIni
-{
-    public class NotFoundFileIni : System.ApplicationException
-    {
-        public NotFoundFileIni() { }
-        public NotFoundFileIni(string message) : base(message) { }
-        public NotFoundFileIni(string message, Exception inner) : base(message, inner) { }
+
+        /// <summary>查找键的值。<br/>
+        /// <returns>
+        /// <para>return 值。</para>
+        /// </returns></summary>
+        /// <param name="key">键。</param>
+        public string GetValueOfKey(string key)
+        {
+            int a = GetIndexOfKey(key);
+            System.Collections.ArrayList b = (System.Collections.ArrayList)all[a];
+            return b[1].ToString();
+        }
+
+
     }
 }

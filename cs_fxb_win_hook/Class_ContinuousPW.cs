@@ -7,20 +7,20 @@ namespace cs_fxb_win_hook
 {
     class ContinuousPW
     {
-        //字段
-        /// <summary>密码。
-        /// </summary>
-        private string pw;
+        // ************************ 字段 ********************
 
-        /// <summary>输入的字符。
-        /// </summary>
-        private string input;//不手动设置input的大小限制。
 
-        //方法
-        /// <summary>构造函数。初始化字段。 
-        /// </summary>
+        private string pw; // 密码。
+
+        private string input; // 输入的字符。不手动设置input的大小限制。
+
+
+        // ************************ 构造函数 ********************
+
+
         public ContinuousPW()
         {
+            // 初始化字段。 
             pw = string.Empty;
             input = string.Empty;
         }
@@ -29,29 +29,20 @@ namespace cs_fxb_win_hook
         /// </summary>
         public void ClearInput()
         {
-            input = string.Empty; 
+            input = string.Empty;
         }
 
         /// <summary>设置密码。
-        /// <returns>
-        /// return 0：成功。
-        /// return -1：pw 为 string.Empty 或 null，密码被清空。
-        /// </returns></summary>
-        /// <param name="pw">_in_，密码。</param>
-        public int SetPw(string pw)
+        /// </summary>
+        /// <param name="pw">密码。传入string.Empty 或 null，则密码被清空。</param>
+        public void SetPw(string pw)
         {
             this.input = string.Empty;//肯定是设置密码之后，再输入密码，所以清空之前的输入。
-            if (string.Empty == pw || null == pw)
+            if (null == pw)
             {
-                this.pw = string.Empty;
-                return -1;
+                pw = string.Empty;
             }
-            else
-            {
-                this.pw = pw;
-                return 0;
-            }
-
+            this.pw = pw;
         }
 
         /// <summary>输入字符，并核对密码。
@@ -60,8 +51,8 @@ namespace cs_fxb_win_hook
         /// <para>return 0：密码错误。</para>
         /// <para>return 1：密码正确。</para>
         /// </returns></summary>
-        /// <param name="input">_in_，输入的字符。</param>
-        public int InputPw(string input)
+        /// <param name="inchar">输入的字符。</param>
+        public int InputPw(string inchar)
         {
             if (string.Empty == this.pw)
             {
@@ -69,7 +60,7 @@ namespace cs_fxb_win_hook
             }
             else
             {
-                this.input = this.input + input;
+                this.input = this.input + inchar;
                 if (this.input.Length > this.pw.Length)
                 {
                     this.input = this.input.Substring(

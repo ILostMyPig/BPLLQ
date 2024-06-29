@@ -11,83 +11,101 @@ namespace set_ini
 {
     public partial class Form1 : Form
     {
+        public FileIni.FileIni fIni = new FileIni.FileIni();
+        string fullFileName = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "set.ini";
+
+        private void FillListBox()
+        {
+            listBox1.Items.Clear();
+            foreach (System.Collections.ArrayList i in fIni.all)
+            {
+                listBox1.Items.Add(i[0] + "=" + i[1]);
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
 
-            int re = 0;
-
-            string thisPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-
             try
             {
-                re = Global.fIni.LoadIni(thisPath + "set.ini"); // 载入 ini 文件。
+                fIni.LoadIniFile(fullFileName); // 载入 ini 文件。                
             }
-            catch (CE_FileIni.NotFoundFileIni)
+            catch (Exception ex)
             {
-                MessageBox.Show("set.ini文件丢失，即将载入空配置文件。");                
+                MessageBox.Show("加载ini文件出错，即将加载默认配置。" +
+                    Environment.NewLine + "错误信息：" +
+                    Environment.NewLine + ex.ToString());
+                fIni.path = fullFileName;
+                fIni.UpdateOrAddItem("主页", "https://www.baidu.com/");
+                fIni.UpdateOrAddItem("关闭密码", "1q!Q");
+                fIni.UpdateOrAddItem("定时关机是否开启（是/否）", "否");
+                fIni.UpdateOrAddItem("定时关机时间（例24:00）", "18:05");
+                fIni.UpdateOrAddItem("浏览器选择（ie7-doctype/ie8/ie8-doctype/ie9/ie9-doctype/ie10/ie10-doctype/ie11/ie11-doctype）", "ie11-doctype");
             }
 
-            // 所有功能的列表。
-            string str = "";
-            re = Global.fIni.GetEntry("主页", ref str); // 主页
-            listBox1.Items.Add("主页" + "=" + str);
-            re = Global.fIni.GetEntry("关闭密码", ref str); // 关闭密码
-            listBox1.Items.Add("关闭密码" + "=" + str);
-            re = Global.fIni.GetEntry("定时关机是否开启（是/否）", ref str); // 定时关机是否开启（是/否）
-            listBox1.Items.Add("定时关机是否开启（是/否）" + "=" + str);
-            re = Global.fIni.GetEntry("定时关机时间（24:00）", ref str); // 定时关机时间（24:00）
-            listBox1.Items.Add("定时关机时间（24:00）" + "=" + str);
+            FillListBox();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void listBox1_Click(object sender, EventArgs e)
         {
-
+            int a = listBox1.SelectedIndex;
+            if (a > -1)
+            { // 没有选中任何项时，值为-1。
+                string[] b = FileIni.FileIni.SplitItem(listBox1.Items[a].ToString());
+                textBox1.Text = b[0];
+                textBox2.Text = b[1];
+            }
         }
 
-        /// <summary>关闭按钮。
-        /// </summary>
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonAddUpdate_Click(object sender, EventArgs e)
+        {
+            fIni.UpdateOrAddItem(textBox1.Text, textBox2.Text);
+            FillListBox();
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        /// <summary>修改项目按钮。
-        /// </summary>
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonDelete_Click(object sender, EventArgs e)
         {
-            int x = listBox1.Items.Count;
-            int y = listBox1.SelectedIndex;
-
-            Form2 a = new Form2();
-
-            string text = listBox1.Items[y].ToString();
-            a.textBox1.Text = text.Split(new char[1] { '=' }, 2)[0];
-            a.textBox2.Text = text.Split(new char[1] { '=' }, 2)[1];
-
-            a.ShowDialog(this); // 以模式窗口打开 Form2。
-
-            // 等待 Form2 关闭后，才会执行下面的代码。
-
-            // 判断列表中项目的数量，在打开Form2前和关闭Form2后是否一致
-            // 如果不一致，说明添加了新项目，则需要删除原来选定的项目，以达到修改的效果。
-            // 如果一致，说明取消了修改操作，则保持列表中项目不动。
-            if (listBox1.Items.Count > x) // 项目的数量不一致。
+            int i = listBox1.SelectedIndex;
+            if (i > -1)
             {
-                listBox1.Items.RemoveAt(y);
+                string item = listBox1.Items[i].ToString();
+                try
+                {
+                    fIni.RemoveItem(item, "item");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("删除“" + item + "”出错。" +
+                    Environment.NewLine + "错误信息：" +
+                    Environment.NewLine + ex.ToString());
+                    return;
+                }
             }
-            else
-            { }
-
+            FillListBox();
         }
 
-        /// <summary>保存按钮。
-        /// </summary>
-        private void button6_Click(object sender, EventArgs e)
+        private void buttonSave_Click(object sender, EventArgs e)
         {
-            int re;
-            re = Global.fIni.CoverIni(ref listBox1);
+            try
+            {
+                fIni.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("保存失败。" +
+                    Environment.NewLine + "错误信息：" +
+                    Environment.NewLine + ex.ToString());
+                return;
+            }
             MessageBox.Show("保存成功。");
+
         }
     }
 }

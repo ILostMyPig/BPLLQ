@@ -72,7 +72,7 @@ namespace cs_fxb_win_hook
         /// <param name="i">虚拟键码。</param>
         public string GetFreeShift(int i)
         {
-            if (i < 0 || i > 255) { throw new CE_ShiftConversion.ArgumentOutOfRangeException("参数i的取值范围是[0,255]，但是传入的值是" + i.ToString() + "。"); }
+            if (i < 0 || i > 255) { throw new System.ArgumentOutOfRangeException("参数i的取值范围是[0,255]，但是传入的值是" + i.ToString() + "。"); }
             return vks[i, 0];
         }
 
@@ -84,7 +84,7 @@ namespace cs_fxb_win_hook
         /// <param name="i">虚拟键码。</param>
         public string GetHoldShift(int i)
         {
-            if (i < 0 || i > 255) { throw new CE_ShiftConversion.ArgumentOutOfRangeException("参数i的取值范围是[0,255]，但是传入的值是" + i.ToString() + "。"); }
+            if (i < 0 || i > 255) { throw new System.ArgumentOutOfRangeException("参数i的取值范围是[0,255]，但是传入的值是" + i.ToString() + "。"); }
             return vks[i, 1];
         }
 
@@ -96,7 +96,7 @@ namespace cs_fxb_win_hook
         /// <param name="a">不按住Shift时的字符。</param>
         public string GetHoldShift(string a)
         {
-            if (a.Length != 1) { throw new CE_ShiftConversion.ArgumentOutOfRangeException("参数a中的字符数必须是1，但传入的值中的字符数是" + a.Length.ToString() + "。"); }
+            if (a.Length != 1) { throw new System.ArgumentOutOfRangeException("参数a中的字符数必须是1，但传入的值中的字符数是" + a.Length.ToString() + "。"); }
 
             string b = string.Empty;
             for (int i = vks.GetLowerBound(0); i <= vks.GetUpperBound(0); i++)
@@ -108,14 +108,5 @@ namespace cs_fxb_win_hook
             }
             return b;
         }
-    }
-}
-namespace CE_ShiftConversion
-{
-    public class ArgumentOutOfRangeException : System.ApplicationException
-    {
-        public ArgumentOutOfRangeException() { }
-        public ArgumentOutOfRangeException(string message) : base(message) { }
-        public ArgumentOutOfRangeException(string message, Exception inner) : base(message, inner) { }
     }
 }

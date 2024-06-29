@@ -43,9 +43,11 @@ namespace cs_fxb_win_hook
         static void Main()
         {
             // 使用Sleep原因:系统在登陆时,有一段屏幕由暗到亮的动画.
-            // 若电脑运行速度较快，则完全变亮之前就会启动次程序。
+            // 若电脑运行速度较快，则完全变亮之前就会启动程序。
             // 此程序中挂起winlogin进程的操作会使变亮程序暂停，导致屏幕一直处于暗状态。
             System.Threading.Thread.Sleep(5000);
+
+
 
             bool re;
             int re_int;
@@ -63,12 +65,54 @@ namespace cs_fxb_win_hook
             {
                 cs_fxb_win_hook.MyGlobal initializeGlobal = new cs_fxb_win_hook.MyGlobal();
             }
-            catch (CE_FileIni.NotFoundFileIni)
+            catch (System.IO.FileNotFoundException ex)
             {
-                string log = "配置文件丢失。\r\n请使用“霸屏浏览器设置”程序来重建配置文件。";
+                string log = "配置文件丢失，请使用“set.exe”程序来重建配置文件。" +
+                    Environment.NewLine + "错误信息：" +
+                    Environment.NewLine + ex.ToString(); ;
                 System.Windows.Forms.MessageBox.Show(log);
                 return;
             }
+
+            // 设置浏览器版本。
+            Microsoft.Win32.RegistryKey reg = Microsoft.Win32.Registry.LocalMachine;
+            reg = reg.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_BROWSER_EMULATION", true);
+            reg.DeleteValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", false);
+            switch (MyGlobal.fIni.GetValueOfKey("浏览器选择（ie7-doctype/ie8/ie8-doctype/ie9/ie9-doctype/ie10/ie10-doctype/ie11/ie11-doctype）"))
+            {
+                case "ie7-doctype":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 7000);
+                    break;
+                case "ie8":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 8888);
+                    break;
+                case "ie8-doctype":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 8000);
+                    break;
+                case "ie9":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 9999);
+                    break;
+                case "ie9-doctype":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 9000);
+                    break;
+                case "ie10":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 10001);
+                    break;
+                case "ie10-doctype":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 10000);
+                    break;
+                case "ie11":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 11001);
+                    break;
+                case "ie11-doctype":
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 11000);
+                    break;
+                default:
+                    MessageBox.Show("浏览器选择设置错误，将向系统申请ie11-doctype浏览器。");
+                    reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 11000);
+                    break;
+            }
+
 
             // 启动定时关机线程.
             AutoShutdown.autoShutdownBoo = true;
@@ -98,13 +142,13 @@ namespace cs_fxb_win_hook
                 if (MyGlobal.autoShutdownEnable == false)
                 {
                     MyGlobal.fMain = new Form1();
-                    Application.Run(MyGlobal.fMain); 
+                    Application.Run(MyGlobal.fMain);
                 }
             }
             catch (Exception e)
             {
                 string log = "语句“Application.Run(new Form1());”捕获到异常。";
-                MyGlobal.writeLog.Write(MyGlobal.thisPath + "log\\", "Program-Main", log, e);
+                Class_WriteLog.Write(MyGlobal.thisPath + "log\\", "Program-Main", log, e);
             }
 
             re_int = StopdisStart(); // 显示开始按钮和开始栏。

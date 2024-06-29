@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace cs_fxb_win_hook
 {
     class MyIMessageFilter : IMessageFilter
-    {
+    { // 重写消息泵，是为了实现退出密码功能。
         const int WM_KEYUP = 0x0101;
 
         public MyIMessageFilter()
@@ -41,7 +41,7 @@ namespace cs_fxb_win_hook
             // 所以不用这两个消息。
             if (m.Msg == WM_KEYUP) // 若本消息是 WM_KEYUP，则执行密码处理。
             {
-                //SHIFT键会被键盘hook拦截，所以要在键盘猴钩子中允许单独按住shift的情况。
+                // SHIFT键会被键盘hook拦截，所以要在键盘猴钩子中允许单独按住shift的情况。
                 System.Int16 reShift = GetKeyState(16);
                 System.Int16 reCapsL = GetKeyState(0x14);
 
@@ -61,11 +61,11 @@ namespace cs_fxb_win_hook
                     }
 
                 }
-                catch (CE_ShiftConversion.ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException e)
                 {
                     string classification = "MyIMessageFilter-PreFilterMessage";
                     string log = "GetHoldShift或GetFreeShift函数抛出异常，但不影响程序运行。";
-                    MyGlobal.writeLog.Write(MyGlobal.thisPath + "log\\", classification, log, e);
+                    Class_WriteLog.Write(MyGlobal.thisPath + "log\\", classification, log, e);
                 }
 
                 // 若输入的不是字符，则视为不是密码，即密码输入中断（未能连续输入）。
@@ -78,11 +78,11 @@ namespace cs_fxb_win_hook
                         )
                     {
                         MyGlobal.fMain.Close();
-                        return false;//返回false则消息未被截取，传给系统处理。
+                        return false; // 返回false则消息未被截取，传给系统处理。
                     }
                     else
                     {
-                        return false;//返回false则消息未被截取，传给系统处理。
+                        return false; // 返回false则消息未被截取，传给系统处理。
                     }
                 }
                 else // if (x.Length > 0) // 若输入的是字符,则视为输入了密码。
@@ -90,12 +90,12 @@ namespace cs_fxb_win_hook
                     MyGlobal.cPw.ClearInput();
                     MyGlobal.cPw2.ClearInput();
 
-                    return false;//返回false则消息未被截取，传给系统处理。
+                    return false; // 返回false则消息未被截取，传给系统处理。
                 }
             }
             else // if (m.Msg == WM_KEYUP) // 若本消息是 WM_KEYUP，则执行密码处理。
             {
-                return false;//返回false则消息未被截取，传给系统处理。
+                return false; // 返回false则消息未被截取，传给系统处理。
             }
         }
 

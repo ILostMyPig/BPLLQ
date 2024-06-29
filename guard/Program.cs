@@ -14,8 +14,6 @@ namespace guard
         static void Main()
         {// 此程序是守护进程，也被称为 B 程序。
 
-            
-
             string tim =string.Empty ;
             string thisPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             string thisGuardPath = thisPath + "guard\\";

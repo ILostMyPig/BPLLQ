@@ -45,7 +45,7 @@ namespace cs_fxb_win_hook
             catch (Exception e)
             {
                 string log = "try块包含整个GruadWhile函数。";
-                MyGlobal.writeLog.Write(MyGlobal.thisPath + "log\\", "Class2-GruadWhile", log, e);
+                Class_WriteLog.Write(MyGlobal.thisPath + "log\\", "Class2-GruadWhile", log, e);
             }
         }
 

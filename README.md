@@ -1,45 +1,52 @@
-github不能及时更新了，实在时网络不好，经常打不开github
+@[toc]
 
-[toc]
+末尾附有源代码的下载地址，软件免费使用，感谢大家共同上传BUG和改进。
 
 # 霸屏浏览器
 
-# 软件介绍
+## 软件介绍
 
-霸屏浏览器的作用，就是让客户机仅提供Web访问功能，屏蔽其它所有功能，即不允许客户机退出浏览器界面，或者是使用客户机的其它功能，也不允许关机、重启命令。
+霸屏浏览器作用：使电脑仅提供Web浏览器功能，屏蔽所有其它功能。比如，不允许退出浏览器，不允许关机和重启，不允许使用任务管理器，不允许使用开始菜单和任务栏，不允许跳转其它软件。
 
-常常用于触摸屏浏览器、自助机浏览器。
+开发目的是为了给公共区域的自助电脑使用，比如触摸屏浏览器、自助机浏览器。网上没找到免费产品，收费的授权方式又很不讲理，所以自己开发了一个。
 
-  **注意：部分操作系统因为优化和修改，导致该软件需要用管理员权限运行：安装后右击桌面的图标->点属性->点兼容性->勾选以管理员身份运行此程序。**
+  **注意：程序会自动获取管理员权限，但部分操作系统因为优化和修改，导致要手动允许管理员权限才能运行：右击cs_fxb_win_hook.exe->点属性->点兼容性->勾选以管理员身份运行此程序。**
 
-# 软件信息
+## 软件信息
 
   - 软件授权：免费软件
   - 软件类型：国产软件
   - 应用平台：windows 7 sp1 32位
   - 软件语言：简体中文
 
-# 下载文件
 
-  ## 最新版
+## 更新日志
 
-  - 下载地址：[霸屏浏览器](https://pan.baidu.com/s/1xd7G6BWvde8HF81SPjFrsg)提取码：9x2o
+V7.5.10
 
-**霸屏浏览器启动程序 ：cs_fxb_win_hook.exe。**
-**设置程序：set_ini.exe。**
+- 自动关机功能不能启动。
 
-  ## 开发环境
-  - 安装打包工具（在V6.2.0之前使用）：[InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015](https://pan.baidu.com/s/1mboAgy0ZXLYZTAMeVvyepQ)提取码：c2eb
-  - 开发工具（在V6.2.0之前使用）：[Microsoft Visual Studio 2010 professional sp1](https://pan.baidu.com/s/1ihtcSj4DzyZBs43QYGX8oQ)提取码：p2px
-  - 开发工具（从V6.2.0开始使用）：Microsoft Visual Studio 2019
+V7.5.9（大范围重构）
 
-  ## 源代码
-  - 所有版本的源代码：[霸屏浏览器（code）](https://pan.baidu.com/s/1UfaNEYuDx3Ins5FdzbUIPg)提取码：mwpi
+功能增减：
 
-  ## 程序流程图
-  - 下载地址：[霸屏浏览器程序流程图](https://pan.baidu.com/s/1tpqniq9CoicXlXnL9B90PA)提取码：nyxp
+- 将浏览器默认为ie11，且可通过set_ini.exe改为ie的其它版本。
+- 能阻止“javascript:{0}”方式在新窗口中打开页面。
+- 执行“运行我，制作绿色版.bat”前，无需手动生成解决方案。
+- class FileIni支持修改分隔符了。
+- class Class_WriteLog支持Exception.InnerException了。
 
-# 更新日志
+优化和修正：
+
+- 去除class FileIni的自定义异常。
+- 去除class ShiftConversion的自定义异常。
+- 改变部分函数执行失败时的反馈方式，从用返回值表示，改为抛出异常。
+- 把键盘钩子从debug状态，改为release状态。
+- 修改set_ini.exe的界面。
+- 修改class FileIni算法，使之更符合高内聚低耦合。
+- 删除残留的鼠标钩子代码。
+- 优化class ContinuousPW的SetPw。
+- 简化class Class_WriteLog。
 
 V6.2.1
 
@@ -126,3 +133,27 @@ V1.1.0
 V1.0.0
 
 - 第一版。
+
+## 下载文件
+
+  ### 最新版
+
+**霸屏浏览器**
+
+  - 下载地址：[霸屏浏览器](https://pan.baidu.com/s/1xd7G6BWvde8HF81SPjFrsg)提取码：9x2o
+
+**霸屏浏览器启动程序 ：cs_fxb_win_hook.exe。**
+**设置程序：set_ini.exe。**
+
+  ### 开发环境
+
+  - 安装打包工具（自V6.2.0开始停止使用）：[InstallShield 2015 Limited Edition for Microsoft Visual Studio 2010, 2012, 2013 and 2015](https://pan.baidu.com/s/1mboAgy0ZXLYZTAMeVvyepQ)提取码：c2eb
+  - 开发工具：[Microsoft Visual Studio 2010 professional sp1](https://pan.baidu.com/s/1ihtcSj4DzyZBs43QYGX8oQ)提取码：p2px
+
+  ### 源代码
+
+  - 所有版本的源代码：[霸屏浏览器（code）](https://github.com/ILostMyPig/BPLLQ)
+
+  ### 程序流程图
+
+  - 下载地址：[霸屏浏览器程序流程图](https://pan.baidu.com/s/1tpqniq9CoicXlXnL9B90PA)提取码：nyxp
