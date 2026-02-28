@@ -13,6 +13,9 @@ namespace cs_fxb_win_hook
 {
     public partial class Form1 : Form
     {
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private WebBrowser webBrowser1;
         public Form1()
         {
@@ -109,6 +112,23 @@ namespace cs_fxb_win_hook
         private void 粘贴ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SendKeys.Send("^v");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true; // 取消窗体关闭
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            // 设置并强制激活
+            SetForegroundWindow(this.Handle);
         }
 
     }

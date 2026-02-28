@@ -36,6 +36,8 @@ namespace cs_fxb_win_hook
         [DllImport("dis_start.dll", EntryPoint = "StopdisStart")]
         static extern int StopdisStart();
 
+        
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -112,7 +114,6 @@ namespace cs_fxb_win_hook
                     reg.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName+".exe", 11000);
                     break;
             }
-
 
             // 启动定时关机线程.
             AutoShutdown.autoShutdownBoo = true;
