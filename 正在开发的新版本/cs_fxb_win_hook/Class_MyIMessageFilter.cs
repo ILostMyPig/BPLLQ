@@ -77,6 +77,7 @@ namespace cs_fxb_win_hook
                         || MyGlobal.cPw2.InputPw(x) == 1
                         )
                     {
+                        MyGlobal.fMain.FormClosing -= MyGlobal.fMain.Form1_FormClosing;
                         MyGlobal.fMain.Close();
                         return false; // 返回false则消息未被截取，传给系统处理。
                     }

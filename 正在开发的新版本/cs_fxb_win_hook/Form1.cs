@@ -119,7 +119,7 @@ namespace cs_fxb_win_hook
 
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        public void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true; // 取消窗体关闭
         }

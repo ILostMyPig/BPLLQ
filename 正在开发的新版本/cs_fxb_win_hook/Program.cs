@@ -128,12 +128,13 @@ namespace cs_fxb_win_hook
             threadKeyboardHook = new System.Threading.Thread(Class_hook.keyboardhook);
             threadKeyboardHook.Start();
 
-            StartDisASK(); // 禁用辅助键。
+            // 禁用辅助键。
+            StartDisASK(); 
 
-            #region 挂起winlogin进程。
+            // 挂起winlogin进程。
             re = EnableDebugPrivilege(); // 将当前进程提权。
             re = SusWin(); // 挂起winlogin进程。
-            #endregion
+
 
             re_int = StartdisStart(); // 隐藏开始按钮和开始栏。
 
@@ -169,7 +170,7 @@ namespace cs_fxb_win_hook
             threadGruad.Join();
 
             // 退出定时关机线程,并完成定时关机。
-            // Interrupt可以使目标线程在 “等待状态” 
+            // Interrupt可以使目标线程在 “等待状态”
             // 或 “下一次进入等待状态” 时
             // 通过触发异常来中断等待。
             threadAutoShutdown.Interrupt();
